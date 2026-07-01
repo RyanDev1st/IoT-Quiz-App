@@ -35,7 +35,8 @@ let questionStats = {};
 // Persistence
 let appState = {
   activeSessionId: null,
-  sessions: []
+  sessions: [],
+  sm2Data: {}
 };
 
 function shuffle(array) {
@@ -52,8 +53,9 @@ function loadState() {
   const data = localStorage.getItem('iot_sessions_v3');
   if (data) {
     appState = JSON.parse(data);
+    if (!appState.sm2Data) appState.sm2Data = {};
   } else {
-    appState = { activeSessionId: null, sessions: [] };
+    appState = { activeSessionId: null, sessions: [], sm2Data: {} };
   }
 }
 
@@ -201,6 +203,30 @@ function init() {
   elements.btnNewSession.addEventListener('click', () => {
       createSession(originalQuestionsPool);
   });
+  
+  // Create Review button dynamically if it doesn't exist
+  if (!document.getElementById('btn-review-due')) {
+      const btnReview = document.createElement('button');
+      btnReview.id = 'btn-review-due';
+      btnReview.className = 'nav-btn';
+      btnReview.title = 'Review Due Topics';
+      btnReview.innerHTML = '<i class="fa-solid fa-calendar-check"></i>';
+      elements.btnNewSession.parentNode.insertBefore(btnReview, elements.btnNewSession.nextSibling);
+      
+      btnReview.addEventListener('click', () => {
+          const now = Date.now();
+          const dueQuestions = originalQuestionsPool.filter(q => {
+              if (!appState.sm2Data || !appState.sm2Data[q.id]) return false;
+              return appState.sm2Data[q.id].dueDate <= now;
+          });
+          
+          if (dueQuestions.length > 0) {
+              createSession(dueQuestions, "Due Reviews");
+          } else {
+              alert("No questions are due for review right now! Great job.");
+          }
+      });
+  }
   
   elements.btnSubmit.addEventListener('click', showFinalScore);
   
@@ -397,14 +423,29 @@ function renderQuestion(index) {
       const ankiBtns = ankiContainer.querySelectorAll('.anki-btn');
       ankiBtns.forEach(btn => {
           btn.addEventListener('click', (e) => {
-              if (e.target.classList.contains('anki-again') || e.target.classList.contains('anki-hard')) {
-                  // Push to end of deck
+              let grade = 3;
+              if (e.target.classList.contains('anki-again')) grade = 1;
+              else if (e.target.classList.contains('anki-hard')) grade = 3;
+              else if (e.target.classList.contains('anki-good')) grade = 4;
+              else if (e.target.classList.contains('anki-easy')) grade = 5;
+
+              if (!appState.sm2Data) appState.sm2Data = {};
+              if (!appState.sm2Data[q.id]) {
+                  appState.sm2Data[q.id] = { interval: 0, repetition: 0, efactor: 2.5, dueDate: Date.now() };
+              }
+
+              appState.sm2Data[q.id] = window.supermemo(appState.sm2Data[q.id], grade);
+              // Set dueDate (interval in days)
+              appState.sm2Data[q.id].dueDate = Date.now() + (appState.sm2Data[q.id].interval * 24 * 60 * 60 * 1000);
+
+              if (grade < 4) {
+                  // Push to end of deck for immediate review in the same session
                   let clonedQ = JSON.parse(JSON.stringify(q));
                   allQuestions.push(clonedQ);
                   updateProgress();
               }
-              ankiContainer.innerHTML = `<p style="margin:0; color:var(--text-muted);">Feedback saved.</p>`;
-              setTimeout(() => { ankiContainer.style.display = 'none'; }, 1000);
+              ankiContainer.innerHTML = `<p style="margin:0; color:var(--text-muted);">Feedback saved! Next review in ${appState.sm2Data[q.id].interval} day(s).</p>`;
+              setTimeout(() => { ankiContainer.style.display = 'none'; }, 1500);
               saveState();
           });
       });
