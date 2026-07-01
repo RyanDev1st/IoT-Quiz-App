@@ -1,0 +1,243 @@
+61CSE111 - IoT and Smart Devices - SS2025
+
+Re-exam with solutions
+Full name	: .................................................................
+Student ID	: .................................................................
+Intake		: ................................................................. 
+Notes: Duration 90 minutes. Closed book. Questions are based on the curriculum aka.ms/iot-beginners.
+
+
+
+Part 1: Multiple choice questions (8 points)
+
+There are 40 multiple choice questions, choose the most appropriate answer for each question and write it to the answer sheet (A, B, C, D).
+
+Answer sheet:
+
+
+
+
+
+
+1. Where are IoT edge devices typically deployed for optimal performance?
+On cloud servers to handle global data
+On public internet for open access
+Near the data source, within local networks
+In completely offline environments only
+
+2. Which of the following is a key feature of IoT devices?
+Virtual simulation
+Sensor integration and connectivity
+High-definition graphics
+Data encryption for web apps
+
+3. Digital sensors send data as:
+A sequence of digits 
+Voltage ranges
+High and low voltage only
+
+4. The execution of embedded software in an IoT device is handled by
+Sensor module
+Microcontroller unit
+Communication module
+Digital to analog converter
+
+5. Where is the most AI model of IoT trained?
+In the sensor
+In the edge
+In the cloud
+In other computer
+
+6. What role does the broker play in Message Queuing Telemetry Transport (MQTT)?
+It routes messages between publishers and subscribers
+It generates messages and sends them to sensors
+It stores all data permanently
+It encrypts data between servers
+
+7. Containers are used in software deployment because they:
+Are dependent on the host operating system
+Require dedicated hardware
+Only work with cloud-native services
+Allow applications to run in isolated environments
+
+8. Which of the following best describes the foundation of IoT systems?
+Software components
+Hardware components
+A combination of hardware and software
+None of these components
+
+9. In an IoT setup, actuators are responsible for:
+Sensing changes in the environment
+Processing data in the cloud
+Executing physical actions like movement or light activation
+Connecting edge devices to the networks
+
+10. Which mechanism allows an app to send a command and receive a response from an IoT device?
+Device twin
+Direct method request
+Device to cloud message
+Sensor polling
+
+11. In the sentence 'set a 3 minute timer':
+The intent is 3 minutes and the entity is a timer
+The intent is set a timer and the entity is 3 minutes
+
+12. Language understanding involves:
+Looking at the individual words in a sentence and trying to get the meaning
+Finding pre-defined sentences and using those to get the meaning
+Looking at the whole sentence and trying to get the meaning using the context of the words
+	
+13. The three parts of speech generation are:
+Text analysis, understanding analysis, sound generation
+Text analysis, linguistic analysis, waveform generation
+Word analysis, audio production
+
+14. When deploying a Functions App to the cloud, you need to create and deploy:
+A Functions App, a Storage Account, and Application Settings
+A Functions App only
+A Functions App and a Storage Account only
+
+15. Which of the following statements best summarizes the differences between Single-Board Computers and microcontrollers?
+Single-Board Computers prioritize low power consumption and real-time responsiveness for single-task applications, while microcontrollers offer general-purpose computing capabilities with OS support for multi-purpose tasks.
+Single-Board Computers offer support for various operating systems, making them ideal for multi-purpose tasks, whereas microcontrollers are designed for low power consumption and real-time responsiveness in single-task applications.
+
+16. Points inside the geofence have a distance:
+Less than 0 (a negative value)
+Greater than 0 (a positive value)
+
+17. IoT data is stored by IoT Hub?
+True
+False
+
+18. The three components of architecting an IoT application are
+Things, Insights, Actions
+Things, Internet, Databases
+AI, Blockchain, FizzBuzzers
+
+19. You can use Serverless code to respond to IoT events
+True
+False
+
+20. When you send IoT events to IoT Hub:
+Only one service can read events off the IoT Hub
+Any number of services can read events off the IoT Hub
+Services cannot read events from IoT Hub
+
+21. When reading events off IoT hub, you can only do so using code that runs in the cloud
+True
+False
+
+22. Serverless code can be used to write IoT data to a database
+True
+False
+
+23. The SPI (Serial Peripheral Interface) protocol supports:
+Only one controller and only one peripheral
+Only one controller and multiple peripherals
+Multiple controllers and multiple peripherals
+
+24. Which levels of Quality of Service (QoS) that MQTT provides?
+At most once - the message is sent only once and the client and broker take no additional steps to acknowledge delivery (fire and forget).
+At least once - the message is re-tried by the sender multiple times until acknowledgement is received (acknowledged delivery).
+Exactly once - the sender and receiver engage in a two-level handshake to ensure only one copy of the message is received (assured delivery).
+All of them
+
+25. Processing of data from analog sensors in IoT devices
+IoT devices require conversion of analog values to digital values using an Analog-Digital converter (ADC)
+IoT devices can work with analog values without requiring conversion	
+
+26. Symmetric key encryption compares to asymmetric key encryption in which ways:
+Symmetric key encryption is slower than asymmetric
+Symmetric key encryption is slower than asymmetric, but more secure
+Symmetric key encryption is faster than asymmetric, but less secure
+Symmetric key encryption is more secure than asymmetric
+
+27. The technique uses to train a model with only a few images from a pretrained model is called:
+Supervised learning
+Few-shot learning
+Transfer learning
+
+28. Edge devices always need an Internet connection.
+True
+False
+
+29. AI models would convert 1234 into which spoken phrase:
+One two three four
+One thousand two hundred and thirty four
+It can be ‘one two three four’ or ‘one thousand two hundred and thirty four’ depending on the context
+
+30. Can detected objects from an image overlap?
+True
+False
+
+31. Serverless code can only be written in JavaScript and COBOL:
+True
+False
+
+32. Edge computing can be more secure than cloud computing.
+True
+False
+
+33. Running an ML model on an edge device is less accurate than running an ML model in the cloud.
+True
+False
+
+34. What is the full form of IIoT?
+Intelligent IoT
+Infrastructure IoT
+Industrial IoT
+Integrated IoT
+
+35. The I2C (Inter-Integrated Circuit) protocol supports:
+Only one controller and only one peripheral
+Only one controller and multiple peripherals
+Multiple controllers and multiple peripherals
+
+36. How large is 1 second of 16-bit audio sampled at 16 KHz?
+1KB
+16KB
+32KB
+
+37. Pulse width modulation (PWM) is commonly used for controlling what type of device?
+Soft blinking LEDs
+Mechanical actuators
+Audio amplifiers 
+All the above 
+
+38. Data gathered from sensors and sent to the cloud is called:
+Commands
+Telemetry
+Measurements
+
+39. IoT devices gather information from the world around them using:
+Actuators
+Controllers
+Sensors
+Collectors
+
+40. What is the standard method for digitizing analog audio signals?
+Pulse Code Modulation
+Pulse Width Modulation
+Frequency Modulation
+Analog-to-Analog Modulation 
+
+Part 2: Written questions (2 points)
+
+Question 1: (1 point)
+Fill in the two missing parts		 in the diagram
+
+
+
+Question 2: (1 point) 
+An IoT application is to be designed that uses a GPS sensor to determine whether a user is located inside a predefined geographic area (geofence). Based on the user’s location:
+If the user is within the geofenced area, an LED on the IoT device turns ON.
+If the user is outside the area, the LED remains OFF.
+The IoT device is equipped with a GPS sensor to capture real-time location data. This data is transmitted to the cloud for further processing. The system includes two serverless cloud functions:
+Function 1: Receives GPS data from the IoT device and stores it in cloud storage.
+Function 2: Retrieves the latest GPS data, checks whether the location is within the geofence, and sends a command to the IoT device to control the LED accordingly. 
+Your task: 
+Draw a diagram illustrating the components of the IoT system and how they interact, including the GPS sensor, cloud storage, serverless functions, and LED.
+Describe the data flow within the system, from GPS data acquisition to the final control of the LED based on geofence evaluation.
+
+Diagram:
+Explanation: 

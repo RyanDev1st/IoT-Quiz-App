@@ -4033,6 +4033,53 @@ const quizData = [
             ]
           }
         ]
+      },
+      {
+        "title": "Written Part - Fill in the Blanks",
+        "quiz": [
+          {
+            "type": "FIB",
+            "questionText": "In an IoT application that checks user location against a geofence, a ______ is used to capture real-time location data.",
+            "correctAnswer": "GPS sensor",
+            "explanation": "A GPS sensor captures real-time location data for geofence evaluation."
+          },
+          {
+            "type": "FIB",
+            "questionText": "Data captured by the GPS sensor is transmitted to the ______ for further processing.",
+            "correctAnswer": "cloud",
+            "explanation": "IoT devices often send telemetry data to the cloud for heavy processing."
+          },
+          {
+            "type": "FIB",
+            "questionText": "A serverless function that receives GPS data from the IoT device stores it in ______.",
+            "correctAnswer": "cloud storage",
+            "explanation": "Function 1 receives GPS data and stores it in cloud storage."
+          },
+          {
+            "type": "FIB",
+            "questionText": "A second serverless function retrieves the latest GPS data, checks it against the ______, and sends a command back.",
+            "correctAnswer": "geofence",
+            "explanation": "Function 2 compares the location data to the geofence boundary."
+          },
+          {
+            "type": "FIB",
+            "questionText": "If the user is within the geofenced area, a command is sent to the IoT device to turn ______ an LED.",
+            "correctAnswer": "ON",
+            "explanation": "The LED is an actuator that turns ON when the user is inside the geofence."
+          },
+          {
+            "type": "FIB",
+            "questionText": "The flow of data starts with GPS data acquisition on the ______ device.",
+            "correctAnswer": "IoT",
+            "explanation": "The IoT device initiates the data flow by acquiring GPS data."
+          },
+          {
+            "type": "FIB",
+            "questionText": "The final step in the data flow is the control of the ______ based on geofence evaluation.",
+            "correctAnswer": "LED",
+            "explanation": "The LED acts as the output or actuator in this system."
+          }
+        ]
       }
     ]
   }

@@ -21,7 +21,11 @@ const elements = {
   btnNewSession: document.getElementById('btn-new-session'),
   btnToggleSidebar: document.getElementById('btn-toggle-sidebar'),
   btnOpenSidebar: document.getElementById('btn-open-sidebar'),
-  sessionSidebar: document.getElementById('session-sidebar')
+  sessionSidebar: document.getElementById('session-sidebar'),
+  newSessionModal: document.getElementById('new-session-modal'),
+  closeModal: document.getElementById('close-modal'),
+  btnStartSession: document.getElementById('btn-start-session'),
+  qCountInput: document.getElementById('q-count')
 };
 
 let originalQuestionsPool = [];
@@ -201,8 +205,41 @@ function init() {
   }
 
   elements.btnNewSession.addEventListener('click', () => {
-      createSession(originalQuestionsPool);
+      if(elements.newSessionModal) elements.newSessionModal.classList.remove('hidden');
+      else createSession(originalQuestionsPool);
   });
+  
+  if(elements.closeModal) {
+      elements.closeModal.addEventListener('click', () => {
+          elements.newSessionModal.classList.add('hidden');
+      });
+  }
+
+  if(elements.btnStartSession) {
+      elements.btnStartSession.addEventListener('click', () => {
+          let qType = 'MCQ';
+          document.getElementsByName('q-type').forEach(radio => {
+              if (radio.checked) qType = radio.value;
+          });
+          let count = parseInt(elements.qCountInput.value) || 10;
+          
+          let pool = originalQuestionsPool.filter(q => {
+              if (qType === 'MCQ') return q.type !== 'FIB';
+              if (qType === 'FIB') return q.type === 'FIB';
+              return true; // BOTH
+          });
+          
+          pool = shuffle([...pool]).slice(0, count);
+          
+          if (pool.length === 0) {
+              alert('No questions match your criteria.');
+              return;
+          }
+          
+          elements.newSessionModal.classList.add('hidden');
+          createSession(pool, qType + " Session");
+      });
+  }
   
   // Create Review button dynamically if it doesn't exist
   if (!document.getElementById('btn-review-due')) {
@@ -331,7 +368,116 @@ function renderQuestion(index) {
   const optionsList = document.createElement('div');
   optionsList.className = 'options-list';
   
-  q.answerOptions.forEach((opt, optIndex) => {
+  if (q.type === 'FIB') {
+      const fibContainer = document.createElement('div');
+      fibContainer.className = 'fib-container';
+      fibContainer.style.padding = '1rem';
+      
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'fib-input';
+      input.placeholder = 'Type your answer...';
+      input.style.width = '100%';
+      input.style.padding = '0.75rem';
+      input.style.marginBottom = '1rem';
+      input.style.borderRadius = '8px';
+      input.style.border = '1px solid var(--border)';
+      
+      if (hasAnswered) {
+          input.value = userAnswers[index];
+          input.disabled = true;
+          const isCorrect = userAnswers[index].toLowerCase().trim() === q.correctAnswer.toLowerCase().trim();
+          input.style.borderColor = isCorrect ? 'var(--text-green)' : 'var(--text-red)';
+          
+          let expHtml = `<div class="inline-explanation show">
+              <div class="exp-content ${isCorrect ? 'exp-correct' : 'exp-wrong'}">
+                  <strong>${isCorrect ? '<i class="fa-solid fa-check"></i> Correct' : '<i class="fa-solid fa-xmark"></i> Incorrect (Expected: ' + q.correctAnswer + ')'}</strong>
+                  ${q.explanation || ''}
+              </div>
+          </div>`;
+          fibContainer.insertAdjacentHTML('beforeend', expHtml);
+      }
+      
+      const submitBtn = document.createElement('button');
+      submitBtn.innerText = 'Submit Answer';
+      submitBtn.className = 'btn btn-primary';
+      if (hasAnswered) submitBtn.style.display = 'none';
+      
+      submitBtn.addEventListener('click', () => {
+          if (!input.value.trim()) return;
+          card.classList.add('answered');
+          userAnswers[index] = input.value.trim();
+          elements.unclearNudge.classList.remove('hidden');
+          input.disabled = true;
+          submitBtn.style.display = 'none';
+          
+          const isCorrect = userAnswers[index].toLowerCase().trim() === q.correctAnswer.toLowerCase().trim();
+          input.style.borderColor = isCorrect ? 'var(--text-green)' : 'var(--text-red)';
+          
+          if (!questionStats[q.id]) questionStats[q.id] = { tries: 0, wrongCount: 0 };
+          questionStats[q.id].tries++;
+          if (!isCorrect) {
+              questionStats[q.id].wrongCount++;
+          }
+          
+          let expHtml = `<div class="inline-explanation show">
+              <div class="exp-content ${isCorrect ? 'exp-correct' : 'exp-wrong'}">
+                  <strong>${isCorrect ? '<i class="fa-solid fa-check"></i> Correct' : '<i class="fa-solid fa-xmark"></i> Incorrect (Expected: ' + q.correctAnswer + ')'}</strong>
+                  ${q.explanation || ''}
+              </div>
+          </div>`;
+          fibContainer.insertAdjacentHTML('beforeend', expHtml);
+          
+          // Anki Integration
+          const ankiContainer = document.createElement('div');
+          ankiContainer.className = 'anki-container show';
+          ankiContainer.innerHTML = `
+            <p>How hard was this question?</p>
+            <div class="anki-buttons">
+                <button class="anki-btn anki-again">Again (Bad)</button>
+                <button class="anki-btn anki-hard">Hard</button>
+                <button class="anki-btn anki-good">Good</button>
+                <button class="anki-btn anki-easy">Easy</button>
+            </div>
+          `;
+          card.appendChild(ankiContainer);
+          
+          const ankiBtns = ankiContainer.querySelectorAll('.anki-btn');
+          ankiBtns.forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                  let grade = 3;
+                  if (e.target.classList.contains('anki-again')) grade = 1;
+                  else if (e.target.classList.contains('anki-hard')) grade = 3;
+                  else if (e.target.classList.contains('anki-good')) grade = 4;
+                  else if (e.target.classList.contains('anki-easy')) grade = 5;
+
+                  if (!appState.sm2Data) appState.sm2Data = {};
+                  if (!appState.sm2Data[q.id]) {
+                      appState.sm2Data[q.id] = { interval: 0, repetition: 0, efactor: 2.5, dueDate: Date.now() };
+                  }
+
+                  appState.sm2Data[q.id] = window.supermemo(appState.sm2Data[q.id], grade);
+                  appState.sm2Data[q.id].dueDate = Date.now() + (appState.sm2Data[q.id].interval * 24 * 60 * 60 * 1000);
+
+                  if (grade < 4) {
+                      let clonedQ = JSON.parse(JSON.stringify(q));
+                      allQuestions.push(clonedQ);
+                      updateProgress();
+                  }
+                  ankiContainer.innerHTML = \`<p style="margin:0; color:var(--text-muted);">Feedback saved! Next review in \${appState.sm2Data[q.id].interval} day(s).</p>\`;
+                  setTimeout(() => { ankiContainer.style.display = 'none'; }, 1500);
+                  saveState();
+              });
+          });
+          
+          saveState();
+      });
+      
+      fibContainer.appendChild(input);
+      fibContainer.appendChild(submitBtn);
+      optionsList.appendChild(fibContainer);
+  } else {
+    q.answerOptions.forEach((opt, optIndex) => {
     const label = document.createElement('label');
     label.className = 'option-label';
     if (hasAnswered) {
@@ -480,7 +626,8 @@ function renderQuestion(index) {
     }
     
     optionsList.appendChild(label);
-  });
+    });
+  }
   
   card.appendChild(optionsList);
   elements.questionContainer.appendChild(card);
@@ -494,9 +641,13 @@ function showFinalScore() {
   
   let correct = 0;
   Object.keys(userAnswers).forEach(idx => {
-    const optIdx = userAnswers[idx];
-    if (allQuestions[idx] && allQuestions[idx].answerOptions[optIdx].isActuallyCorrect) {
-      correct++;
+    const q = allQuestions[idx];
+    if (!q) return;
+    if (q.type === 'FIB') {
+      if (userAnswers[idx].toLowerCase().trim() === q.correctAnswer.toLowerCase().trim()) correct++;
+    } else {
+      const optIdx = userAnswers[idx];
+      if (q.answerOptions[optIdx] && q.answerOptions[optIdx].isActuallyCorrect) correct++;
     }
   });
   
