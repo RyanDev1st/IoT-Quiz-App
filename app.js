@@ -285,7 +285,7 @@ function init() {
   
   if (elements.btnWeakTopics) {
       elements.btnWeakTopics.addEventListener('click', () => {
-          const redQuestions = originalQuestionsPool.filter(q => questionStats[q.id] && questionStats[q.id].wrongCount >= 2);
+          const redQuestions = originalQuestionsPool.filter(q => questionStats[q.id] && questionStats[q.id].wrongCount >= 1);
           if (redQuestions.length > 0) {
               createSession(redQuestions, "Weak Topics");
           } else {
@@ -683,7 +683,7 @@ function showFinalScore() {
     elements.scoreFeedback.style.color = "var(--text-red)";
   }
   
-  const redQuestions = originalQuestionsPool.filter(q => questionStats[q.id] && questionStats[q.id].wrongCount >= 2);
+  const redQuestions = originalQuestionsPool.filter(q => questionStats[q.id] && questionStats[q.id].wrongCount >= 1);
   if (redQuestions.length > 0 && elements.btnWeakTopics && elements.weakCount) {
       elements.weakCount.innerText = redQuestions.length;
       elements.btnWeakTopics.classList.remove('hidden');
