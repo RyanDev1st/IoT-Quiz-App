@@ -164,7 +164,7 @@ function renderSidebar() {
         <span class="session-name">${s.name}</span>
         <span class="session-date">${s.date}</span>
       </div>
-      <button class="btn-delete-session" title="Delete Session"><i class="fa-solid fa-trash"></i></button>
+      <button type="button" class="btn-delete-session" title="Delete Session"><i class="fa-solid fa-trash"></i></button>
     `;
     
     li.addEventListener('click', () => switchSession(s.id));
@@ -256,6 +256,7 @@ function init() {
   // Create Review button dynamically if it doesn't exist
   if (!document.getElementById('btn-review-due')) {
       const btnReview = document.createElement('button');
+      btnReview.type = 'button';
       btnReview.id = 'btn-review-due';
       btnReview.className = 'nav-btn';
       btnReview.title = 'Review Due Topics';
@@ -415,6 +416,7 @@ function renderQuestion(index) {
       }
       
       const submitBtn = document.createElement('button');
+      submitBtn.type = 'button';
       submitBtn.innerText = 'Submit Answer';
       submitBtn.className = 'btn btn-primary';
       if (hasAnswered) submitBtn.style.display = 'none';
@@ -450,10 +452,10 @@ function renderQuestion(index) {
           ankiContainer.innerHTML = `
             <p>How hard was this question?</p>
             <div class="anki-buttons">
-                <button class="anki-btn anki-again">Again (Bad)</button>
-                <button class="anki-btn anki-hard">Hard</button>
-                <button class="anki-btn anki-good">Good</button>
-                <button class="anki-btn anki-easy">Easy</button>
+                <button type="button" class="anki-btn anki-again">Again (Bad)</button>
+                <button type="button" class="anki-btn anki-hard">Hard</button>
+                <button type="button" class="anki-btn anki-good">Good</button>
+                <button type="button" class="anki-btn anki-easy">Easy</button>
             </div>
           `;
           card.appendChild(ankiContainer);
@@ -573,10 +575,10 @@ function renderQuestion(index) {
       ankiContainer.innerHTML = `
         <p>How hard was this question?</p>
         <div class="anki-buttons">
-            <button class="anki-btn anki-again">Again (Bad)</button>
-            <button class="anki-btn anki-hard">Hard</button>
-            <button class="anki-btn anki-good">Good</button>
-            <button class="anki-btn anki-easy">Easy</button>
+            <button type="button" class="anki-btn anki-again">Again (Bad)</button>
+            <button type="button" class="anki-btn anki-hard">Hard</button>
+            <button type="button" class="anki-btn anki-good">Good</button>
+            <button type="button" class="anki-btn anki-easy">Easy</button>
         </div>
       `;
       card.appendChild(ankiContainer);
