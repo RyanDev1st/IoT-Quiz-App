@@ -25,7 +25,10 @@ const elements = {
   newSessionModal: document.getElementById('new-session-modal'),
   closeModal: document.getElementById('close-modal'),
   btnStartSession: document.getElementById('btn-start-session'),
-  qCountInput: document.getElementById('q-count')
+  qCountInput: document.getElementById('q-count'),
+  btnWeakTopics: document.getElementById('btn-weak-topics'),
+  weakCount: document.getElementById('weak-count'),
+  toast: document.getElementById('toast')
 };
 
 let originalQuestionsPool = [];
@@ -42,6 +45,13 @@ let appState = {
   sessions: [],
   sm2Data: {}
 };
+
+function showToast(msg) {
+  if (!elements.toast) return;
+  elements.toast.innerText = msg;
+  elements.toast.classList.remove('hidden');
+  setTimeout(() => elements.toast.classList.add('hidden'), 3000);
+}
 
 function shuffle(array) {
   let currentIndex = array.length, randomIndex;
@@ -232,7 +242,7 @@ function init() {
           pool = shuffle([...pool]).slice(0, count);
           
           if (pool.length === 0) {
-              alert('No questions match your criteria.');
+              showToast('No questions match your criteria.');
               return;
           }
           
@@ -260,7 +270,7 @@ function init() {
           if (dueQuestions.length > 0) {
               createSession(dueQuestions, "Due Reviews");
           } else {
-              alert("No questions are due for review right now! Great job.");
+              showToast("No questions are due for review right now! Great job.");
           }
       });
   }
@@ -268,15 +278,19 @@ function init() {
   elements.btnSubmit.addEventListener('click', showFinalScore);
   
   elements.btnRetry.addEventListener('click', () => {
-      const redQuestions = originalQuestionsPool.filter(q => questionStats[q.id] && questionStats[q.id].wrongCount >= 2);
-      if (redQuestions.length > 0) {
-          if (confirm(`You have ${redQuestions.length} extremely weak topics. Create a new session with ONLY these?`)) {
-              createSession(redQuestions, "Weak Topics");
-              return;
-          }
-      }
       createSession(originalQuestionsPool);
   });
+  
+  if (elements.btnWeakTopics) {
+      elements.btnWeakTopics.addEventListener('click', () => {
+          const redQuestions = originalQuestionsPool.filter(q => questionStats[q.id] && questionStats[q.id].wrongCount >= 2);
+          if (redQuestions.length > 0) {
+              createSession(redQuestions, "Weak Topics");
+          } else {
+              showToast("No extremely weak topics right now!");
+          }
+      });
+  }
 
   elements.unclearNudge.addEventListener('click', () => {
       elements.theorySidebar.classList.add('open');
@@ -665,6 +679,14 @@ function showFinalScore() {
   } else {
     elements.scoreFeedback.innerText = "Keep studying. Review your weak topics.";
     elements.scoreFeedback.style.color = "var(--text-red)";
+  }
+  
+  const redQuestions = originalQuestionsPool.filter(q => questionStats[q.id] && questionStats[q.id].wrongCount >= 2);
+  if (redQuestions.length > 0 && elements.btnWeakTopics && elements.weakCount) {
+      elements.weakCount.innerText = redQuestions.length;
+      elements.btnWeakTopics.classList.remove('hidden');
+  } else if (elements.btnWeakTopics) {
+      elements.btnWeakTopics.classList.add('hidden');
   }
 }
 

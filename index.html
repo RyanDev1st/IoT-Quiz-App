@@ -76,19 +76,20 @@
       </div>
     </div>
 
+    <!-- Custom Toast -->
+    <div id="toast" class="toast hidden"></div>
+
     <main class="main-content">
       <div id="quiz-screen" class="screen active">
         <div id="single-question-container" class="question-container">
-          <!-- Injected via JS -->
+          <!-- Rendered dynamically -->
         </div>
-        
         <div class="navigation-controls">
-          <button id="btn-prev" class="nav-btn"><i class="fa-solid fa-arrow-left"></i> Previous</button>
+          <button id="btn-prev" class="nav-btn" disabled><i class="fa-solid fa-arrow-left"></i> Previous</button>
           <button id="btn-next" class="nav-btn">Next <i class="fa-solid fa-arrow-right"></i></button>
         </div>
-        
-        <div id="submit-container" class="submit-container mt-4 hidden">
-          <button id="btn-submit" class="btn btn-primary">Submit Exam & See Score</button>
+        <div id="submit-container" class="submit-container hidden">
+          <button id="btn-submit" class="btn btn-primary">Finish Session</button>
         </div>
       </div>
 
@@ -96,7 +97,10 @@
         <div class="score-sticky" id="score-banner">
           <h2>Final Score: <span id="final-score">0</span>%</h2>
           <p id="score-feedback"></p>
-          <button id="btn-retry" class="btn btn-primary mt-4">Retake Exam</button>
+          <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem;">
+              <button id="btn-retry" class="btn btn-primary">Retake Exam</button>
+              <button id="btn-weak-topics" class="btn btn-primary hidden" style="background-color: var(--text-red); color: #fff;">Review Weak Topics (<span id="weak-count">0</span>)</button>
+          </div>
         </div>
       </div>
     </main>
