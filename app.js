@@ -124,8 +124,10 @@ function createSession(questionsToUse, namePrefix = "Session") {
   
   newSession.allQuestions.forEach(q => {
      newSession.questionStats[q.id] = { wrongCount: 0, tries: 0 };
-     q.answerOptions.forEach(o => o.isActuallyCorrect = (o.isCorrect === "true" || o.isCorrect === true));
-     shuffle(q.answerOptions);
+     if (q.answerOptions) {
+         q.answerOptions.forEach(o => o.isActuallyCorrect = (o.isCorrect === "true" || o.isCorrect === true));
+         shuffle(q.answerOptions);
+     }
   });
   shuffle(newSession.allQuestions);
   
