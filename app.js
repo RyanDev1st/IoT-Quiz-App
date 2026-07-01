@@ -464,7 +464,7 @@ function renderQuestion(index) {
                       allQuestions.push(clonedQ);
                       updateProgress();
                   }
-                  ankiContainer.innerHTML = \`<p style="margin:0; color:var(--text-muted);">Feedback saved! Next review in \${appState.sm2Data[q.id].interval} day(s).</p>\`;
+                  ankiContainer.innerHTML = `<p style="margin:0; color:var(--text-muted);">Feedback saved! Next review in ${appState.sm2Data[q.id].interval} day(s).</p>`;
                   setTimeout(() => { ankiContainer.style.display = 'none'; }, 1500);
                   saveState();
               });
